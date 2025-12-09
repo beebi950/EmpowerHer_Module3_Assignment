@@ -1,37 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Book Management CRUD</title>
+  <title>Book App</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDK -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
 </head>
 <body>
 
-<div class="container">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h2>Add Book</h2>
+  <h1>Book Management</h1>
 
-    <form id="bookForm">
-      <input type="text" id="title" placeholder="Book Title" required>
-      <input type="text" id="author" placeholder="Author Name" required>
-      <input type="number" id="price" placeholder="Price" required>
-      <input type="text" id="image" placeholder="Image URL" required>
-      <button type="submit">Add Book</button>
-    </form>
-  </div>
+  <form id="addBookForm">
+    <input id="title" placeholder="Title" required>
+    <input id="author" placeholder="Author" required>
+    <input id="price" type="number" placeholder="Price" required>
+    <input id="imageUrl" placeholder="Image URL" required>
+    <button>Add Book</button>
+  </form>
 
-  <!-- Main content -->
-  <div class="main">
-    <h1>Book List</h1>
-    <div id="books" class="grid"></div>
-  </div>
-</div>
+  <div id="booksGrid"></div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-<script src="app.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

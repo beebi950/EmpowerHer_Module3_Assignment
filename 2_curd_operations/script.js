@@ -1,72 +1,59 @@
-// 🔹 STEP 1: Firebase Config (replace with YOUR config)
+import { initializeApp } from 
+"https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+
+import {
+  getFirestore, collection, addDoc,
+  getDocs, deleteDoc, doc, updateDoc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* 🔥 PASTE FIREBASE CONFIG HERE 🔥 */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_DOMAIN",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
   projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
 };
 
-// 🔹 STEP 2: Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const booksRef = db.collection("books");
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const booksRef = collection(db, "books");
 
-// DOM
-const form = document.getElementById("bookForm");
-const booksDiv = document.getElementById("books");
-
-
-// 🔹 CREATE (Add Book)
-form.addEventListener("submit", (e) => {
+// ✅ Add Book
+document.getElementById("addBookForm").addEventListener("submit", async(e)=>{
   e.preventDefault();
-
-  booksRef.add({
-    title: title.value,
-    author: author.value,
-    price: price.value,
-    image: image.value
+  await addDoc(booksRef,{
+    title:title.value,
+    author:author.value,
+    price:+price.value,
+    coverImageURL:imageUrl.value
   });
-
-  form.reset();
+  e.target.reset();
 });
 
-
-// 🔹 READ (Realtime Fetch)
-booksRef.onSnapshot((snapshot) => {
-  booksDiv.innerHTML = "";
-
-  snapshot.forEach((doc) => {
-    const book = doc.data();
-
-    booksDiv.innerHTML += `
+// ✅ Realtime Fetch
+onSnapshot(booksRef,(snapshot)=>{
+  booksGrid.innerHTML="";
+  snapshot.forEach(docSnap=>{
+    let book = docSnap.data();
+    booksGrid.innerHTML+=`
       <div class="card">
-        <img src="${book.image}">
+        <img src="${book.coverImageURL}" width="100%">
         <h3>${book.title}</h3>
-        <p>Author: ${book.author}</p>
-        <p>Price: ₹${book.price}</p>
-
-        <button onclick="updateBook('${doc.id}')">Update Author</button>
-        <button onclick="deleteBook('${doc.id}')">Delete</button>
-      </div>
-    `;
+        <p>${book.author}</p>
+        <button onclick="deleteBook('${docSnap.id}')">Delete</button>
+        <button onclick="updateBook('${docSnap.id}')">Update Author</button>
+      </div>`;
   });
 });
 
+// ✅ Delete
+window.deleteBook = async(id)=>{
+  await deleteDoc(doc(db,"books",id));
+};
 
-// 🔹 UPDATE
-function updateBook(id) {
-  const newAuthor = prompt("Enter new author name");
-
-  if (newAuthor) {
-    booksRef.doc(id).update({
-      author: newAuthor
-    });
-  }
-}
-
-
-// 🔹 DELETE
-function deleteBook(id) {
-  if (confirm("Are you sure?")) {
-    booksRef.doc(id).delete();
-  }
-}
+// ✅ Update
+window.updateBook = async(id)=>{
+  let newAuthor = prompt("New Author Name");
+  await updateDoc(doc(db,"books",id),{author:newAuthor});
+};
