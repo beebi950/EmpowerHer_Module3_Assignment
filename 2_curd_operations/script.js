@@ -6,20 +6,17 @@ import {
   getDocs, deleteDoc, doc, updateDoc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-/* 🔥 PASTE FIREBASE CONFIG HERE 🔥 */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
   projectId: "YOUR_PROJECT_ID",
   appId: "YOUR_APP_ID"
-};
-
-// Initialize Firebase
+}
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const booksRef = collection(db, "books");
 
-// ✅ Add Book
+
 document.getElementById("addBookForm").addEventListener("submit", async(e)=>{
   e.preventDefault();
   await addDoc(booksRef,{
@@ -31,7 +28,6 @@ document.getElementById("addBookForm").addEventListener("submit", async(e)=>{
   e.target.reset();
 });
 
-// ✅ Realtime Fetch
 onSnapshot(booksRef,(snapshot)=>{
   booksGrid.innerHTML="";
   snapshot.forEach(docSnap=>{
@@ -47,12 +43,12 @@ onSnapshot(booksRef,(snapshot)=>{
   });
 });
 
-// ✅ Delete
+
 window.deleteBook = async(id)=>{
   await deleteDoc(doc(db,"books",id));
 };
 
-// ✅ Update
+
 window.updateBook = async(id)=>{
   let newAuthor = prompt("New Author Name");
   await updateDoc(doc(db,"books",id),{author:newAuthor});
