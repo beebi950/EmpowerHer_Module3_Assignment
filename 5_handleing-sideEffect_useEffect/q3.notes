@@ -1,0 +1,75 @@
+a) Component Lifecycle in React Functional Components
+
+In functional components, React manages the component lifecycle using the useEffect hook.
+
+1️ Mount Phase
+
+The mount phase occurs when a component is rendered for the first time.
+
+This is represented by:
+
+useEffect(() => {
+  // runs once after initial render
+}, []);
+
+
+Common uses: API calls, event listeners, timers.
+
+2️ Update Phase
+
+The update phase occurs whenever specified dependencies change.
+
+This is represented by:
+
+useEffect(() => {
+  // runs when dependency value changes
+}, [dependency]);
+
+
+Common uses: reacting to state/prop changes, recalculations.
+
+3️ Unmount Phase
+
+The unmount phase occurs when a component is removed from the DOM.
+
+This is handled using a cleanup function returned from useEffect.
+
+useEffect(() => {
+  return () => {
+    // cleanup code
+  };
+}, []);
+
+-------------------------------------------------
+
+b) What is a Cleanup Function? Why Is It Needed?
+🔹 What is a Cleanup Function?
+
+A cleanup function is a function returned inside useEffect.
+
+It executes before the component unmounts or before the effect runs again.
+
+🔹 Why is it Needed?
+
+Cleanup functions are needed to:
+
+Remove event listeners
+
+Clear timers or intervals
+
+Cancel API subscriptions
+
+Prevent memory leaks
+
+Avoid unwanted background processes
+
+🔹 Example
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
+
+  return () => {
+    clearInterval(timer); // cleanup
+  };
+}, []);
