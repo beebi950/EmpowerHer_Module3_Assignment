@@ -1,18 +1,19 @@
-function ProductList({ products, onSelectProduct }) {
+export default function ProductList({ products, onProductSelect }) {
   console.log("ProductList rendered");
 
   return (
-    <ul>
-      {products.slice(0, 5).map((product) => (
-        <li key={product.id}>
-          {product.name} - ₹{product.price}
-          <button onClick={() => onSelectProduct(product)}>
-            Select
-          </button>
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h3>Product List</h3>
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>
+            {product.name} - ₹{product.price}
+            <button onClick={() => onProductSelect(product)}>
+              Select
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
-
-export default ProductList;

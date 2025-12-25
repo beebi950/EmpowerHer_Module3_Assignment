@@ -1,44 +1,40 @@
 import { useState, useMemo, useCallback } from "react";
 import ProductList from "./ProductList";
 
-const productsData = Array.from({ length: 10000 }, (_, i) => ({
-  id: i,
-  name: `Product ${i}`,
-  price: i + 1
-}));
+const productsData = [
+  { id: 1, name: "Laptop", price: 800 },
+  { id: 2, name: "Phone", price: 500 },
+  { id: 3, name: "Headphones", price: 200 },
+];
 
 export default function App() {
   const [counter, setCounter] = useState(0);
+  const [products] = useState(productsData);
 
-  /* Without useMemo:
-     This would run on EVERY render
-  */
+  // ✅ useMemo: recalculates ONLY when products change
   const totalPrice = useMemo(() => {
-    console.log("🔁 Calculating total price...");
-    return productsData.reduce((sum, p) => sum + p.price, 0);
-  }, [productsData]);
+    console.log("Calculating total price...");
+    return products.reduce((sum, product) => sum + product.price, 0);
+  }, [products]);
 
-  /*Without useCallback:
-     New function reference on every render
-  */
-  const handleSelectProduct = useCallback((product) => {
-    console.log("Selected:", product.name);
+  // ✅ useCallback: stable function reference
+  const handleProductSelect = useCallback((product) => {
+    console.log("Selected product:", product.name);
   }, []);
 
-  console.log("🔄 App rendered");
-
   return (
-    <div>
-      <h1>Total Price: ₹{totalPrice}</h1>
+    <div style={{ padding: "20px" }}>
+      <h2>React Performance Optimization</h2>
 
-      <h2>Counter: {counter}</h2>
+      <h3>Total Price: ₹{totalPrice}</h3>
+
       <button onClick={() => setCounter(counter + 1)}>
-        Increment Counter
+        Increment Counter ({counter})
       </button>
 
       <ProductList
-        products={productsData}
-        onSelectProduct={handleSelectProduct}
+        products={products}
+        onProductSelect={handleProductSelect}
       />
     </div>
   );
